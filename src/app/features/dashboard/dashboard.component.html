@@ -1,0 +1,38 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Dashboard - Sistema de Restaurante</h1>
+    <button (click)="logout()" class="btn-logout">Cerrar Sesión</button>
+  </div>
+
+  <div class="welcome-section">
+    <h2>¡Bienvenido, {{ currentUser?.name }}!</h2>
+    <p class="user-role">Rol: <strong>{{ userRole }}</strong></p>
+    <p class="user-email">Email: {{ currentUser?.email }}</p>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="dashboard-card">
+      <h3>📦 Productos</h3>
+      <p>Gestión de productos del restaurante</p>
+      <button class="btn-primary">Ver Productos</button>
+    </div>
+
+    <div class="dashboard-card">
+      <h3>🍽️ Pedidos</h3>
+      <p>Administrar pedidos y comandas</p>
+      <button class="btn-primary">Ver Pedidos</button>
+    </div>
+
+    <div class="dashboard-card">
+      <h3>🪑 Mesas</h3>
+      <p>Control de mesas del restaurante</p>
+      <button class="btn-primary">Ver Mesas</button>
+    </div>
+
+    <div class="dashboard-card" *ngIf="userRole === 'Administrador'">
+      <h3>👥 Usuarios</h3>
+      <p>Gestión de usuarios y roles</p>
+      <button class="btn-primary">Ver Usuarios</button>
+    </div>
+  </div>
+</div>
