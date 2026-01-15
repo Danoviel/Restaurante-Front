@@ -1,0 +1,106 @@
+<div class="productos-container">
+  <!-- Header -->
+  <div class="productos-header">
+    <div class="header-left">
+      <button (click)="volver()" class="btn-back">
+        ← Volver
+      </button>
+      <h1>Gestión de Productos</h1>
+    </div>
+    <button 
+      *ngIf="userRole === 'Administrador' || userRole === 'Cajero'"
+      (click)="crearProducto()" 
+      class="btn-primary"
+    >
+      + Nuevo Producto
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando productos...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage && !loading" class="error-message">
+    {{ errorMessage }}
+    <button (click)="cargarProductos()" class="btn-retry">Reintentar</button>
+  </div>
+
+  <!-- Lista de Productos -->
+  <div *ngIf="!loading && !errorMessage" class="productos-grid">
+    <!-- Sin productos -->
+    <div *ngIf="productos.length === 0" class="empty-state">
+      <div class="empty-icon">📦</div>
+      <h3>No hay productos registrados</h3>
+      <p>Comienza agregando tu primer producto</p>
+      <button 
+        *ngIf="userRole === 'Administrador' || userRole === 'Cajero'"
+        (click)="crearProducto()" 
+        class="btn-primary"
+      >
+        + Crear Producto
+      </button>
+    </div>
+
+    <!-- Cards de Productos -->
+    <div *ngFor="let producto of productos" class="producto-card">
+      <div class="producto-header">
+        <span class="producto-tipo" [class.tipo-preparado]="producto.tipo === 'preparado'">
+          {{ producto.tipo === 'preparado' ? '👨‍🍳 Preparado' : '🛒 Comprado' }}
+        </span>
+        <span 
+          class="producto-estado"
+          [class.estado-activo]="producto.estado === 'activo'"
+          [class.estado-inactivo]="producto.estado === 'inactivo'"
+        >
+          {{ producto.estado === 'activo' ? '✓ Activo' : '✗ Inactivo' }}
+        </span>
+      </div>
+
+      <div class="producto-body">
+        <h3>{{ producto.nombre }}</h3>
+        <p class="producto-descripcion">{{ producto.descripcion || 'Sin descripción' }}</p>
+        
+        <div class="producto-info">
+          <div class="info-item">
+            <span class="info-label">Precio:</span>
+            <span class="info-value precio">S/ {{ producto.precio | number:'1.2-2' }}</span>
+          </div>
+          
+          <div class="info-item" *ngIf="producto.stock !== null && producto.stock !== undefined">
+            <span class="info-label">Stock:</span>
+            <span 
+              class="info-value stock"
+              [class.stock-bajo]="producto.stock < 10"
+            >
+              {{ producto.stock }} unidades
+            </span>
+          </div>
+
+          <div class="info-item" *ngIf="producto.categoria">
+            <span class="info-label">Categoría:</span>
+            <span class="info-value">{{ producto.categoria.nombre }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div 
+        class="producto-actions"
+        *ngIf="userRole === 'Administrador' || userRole === 'Cajero'"
+      >
+        <button (click)="editarProducto(producto.id!)" class="btn-edit">
+          ✏️ Editar
+        </button>
+        <button 
+          *ngIf="userRole === 'Administrador'"
+          (click)="eliminarProducto(producto.id!)" 
+          class="btn-delete"
+        >
+          🗑️ Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

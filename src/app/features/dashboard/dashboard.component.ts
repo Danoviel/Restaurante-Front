@@ -39,4 +39,9 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
+  irAProductos(): void {
+    this.router.navigate(['/productos']);
+  }
 }
+
